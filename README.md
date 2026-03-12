@@ -6,6 +6,10 @@ This repository contains a Terraform-based live streaming pipeline on AWS.
 
 ![Architecture Diagram](Thmanyah.png)
 
+## Documentation
+
+- PDF: [Live-Streaming-Pipline-Documentation.pdf](Live-Streaming-Pipline-Documentation.pdf)
+
 ## Repository Contents
 
 - `terraform/`: Infrastructure code for MediaConnect, MediaLive, MediaPackage, CloudFront, and IAM
