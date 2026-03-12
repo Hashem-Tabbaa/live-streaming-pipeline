@@ -1,0 +1,986 @@
+{
+  "version": 4,
+  "terraform_version": "1.5.7",
+  "serial": 38,
+  "lineage": "f43b8e2f-1244-05ee-8e29-a8163451e9cb",
+  "outputs": {
+    "cloudfront_domain_name": {
+      "value": "d1pmkig3oymfzd.cloudfront.net",
+      "type": "string"
+    },
+    "cost_warning": {
+      "value": "⚠️  MediaLive costs ~$1/hour. Run 'terraform destroy' immediately after testing!",
+      "type": "string"
+    },
+    "hls_playback_url": {
+      "value": "https://d1pmkig3oymfzd.cloudfront.net/out/v1/da17b266e07c4c8c8048b53329e50a3b/index.m3u8",
+      "type": "string"
+    },
+    "mediaconnect_flow_arn": {
+      "value": "arn:aws:mediaconnect:us-east-1:837027387012:flow:1-XFABBlNcBVpRX1JS-db9e7c6241c5:thmanyah-live-srt-ingest",
+      "type": "string"
+    },
+    "mediapackage_channel_id": {
+      "value": "thmanyah-live-channel",
+      "type": "string"
+    },
+    "mediapackage_hls_endpoint_url": {
+      "value": "https://547f72e6652371c3.mediapackage.us-east-1.amazonaws.com/out/v1/da17b266e07c4c8c8048b53329e50a3b/index.m3u8",
+      "type": "string"
+    },
+    "srt_ingest_endpoint": {
+      "value": "srt://34.203.152.110:9000",
+      "type": "string"
+    },
+    "web_player_instructions": {
+      "value": "    \n============================================================\nLIVE STREAM SETUP COMPLETE!\n============================================================\n    \n1. Open OBS Studio and set stream URL to:\n   srt://34.203.152.110:9000\n    \n2. Start streaming in OBS\n    \n3. Open web-player/index.html and enter the playback URL:\n   https://d1pmkig3oymfzd.cloudfront.net/out/v1/da17b266e07c4c8c8048b53329e50a3b/index.m3u8\n    \nWARNING: Run 'terraform destroy' when done to avoid charges!\n============================================================\n    \n",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "mode": "data",
+      "type": "aws_caller_identity",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "account_id": "837027387012",
+            "arn": "arn:aws:iam::837027387012:user/cli-user",
+            "id": "837027387012",
+            "user_id": "AIDA4FYVYK2CKFITH7PPV"
+          },
+          "sensitive_attributes": []
+        }
+      ]
+    },
+    {
+      "mode": "data",
+      "type": "aws_region",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "description": "US East (N. Virginia)",
+            "endpoint": "ec2.us-east-1.amazonaws.com",
+            "id": "us-east-1",
+            "name": "us-east-1"
+          },
+          "sensitive_attributes": []
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_cloudformation_stack",
+      "name": "mediaconnect_flow",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "capabilities": null,
+            "disable_rollback": false,
+            "iam_role_arn": "",
+            "id": "arn:aws:cloudformation:us-east-1:837027387012:stack/thmanyah-live-mc-flow/fe7562c0-1d49-11f1-b5a4-12aa07713779",
+            "name": "thmanyah-live-mc-flow",
+            "notification_arns": null,
+            "on_failure": null,
+            "outputs": {
+              "FlowArn": "arn:aws:mediaconnect:us-east-1:837027387012:flow:1-XFABBlNcBVpRX1JS-db9e7c6241c5:thmanyah-live-srt-ingest",
+              "SourceIngestIp": "34.203.152.110"
+            },
+            "parameters": {},
+            "policy_body": null,
+            "policy_url": null,
+            "tags": {
+              "Name": "thmanyah-live-mediaconnect-flow"
+            },
+            "tags_all": {
+              "Environment": "demo",
+              "ManagedBy": "terraform",
+              "Name": "thmanyah-live-mediaconnect-flow",
+              "Project": "thmanyah-streaming-assignment"
+            },
+            "template_body": "{\"AWSTemplateFormatVersion\":\"2010-09-09\",\"Description\":\"MediaConnect SRT Ingest Flow\",\"Outputs\":{\"FlowArn\":{\"Value\":{\"Fn::GetAtt\":[\"SrtFlow\",\"FlowArn\"]}},\"SourceIngestIp\":{\"Value\":{\"Fn::GetAtt\":[\"SrtFlow\",\"Source.IngestIp\"]}}},\"Resources\":{\"SrtFlow\":{\"Properties\":{\"Name\":\"thmanyah-live-srt-ingest\",\"Source\":{\"Description\":\"SRT ingest from OBS Studio or public SRT test source\",\"IngestPort\":9000,\"Name\":\"srt-source\",\"Protocol\":\"srt-listener\",\"WhitelistCidr\":\"0.0.0.0/0\"}},\"Type\":\"AWS::MediaConnect::Flow\"}}}",
+            "template_url": null,
+            "timeout_in_minutes": 0,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInVwZGF0ZSI6MTgwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_cloudformation_stack",
+      "name": "mediapackage_endpoint",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "capabilities": null,
+            "disable_rollback": false,
+            "iam_role_arn": "",
+            "id": "arn:aws:cloudformation:us-east-1:837027387012:stack/thmanyah-live-hls-endpoint/3f512c10-1e4f-11f1-8445-0ed080e97a09",
+            "name": "thmanyah-live-hls-endpoint",
+            "notification_arns": null,
+            "on_failure": null,
+            "outputs": {
+              "EndpointUrl": "https://547f72e6652371c3.mediapackage.us-east-1.amazonaws.com/out/v1/da17b266e07c4c8c8048b53329e50a3b/index.m3u8"
+            },
+            "parameters": {},
+            "policy_body": null,
+            "policy_url": null,
+            "tags": {
+              "Name": "thmanyah-live-hls-endpoint"
+            },
+            "tags_all": {
+              "Environment": "demo",
+              "ManagedBy": "terraform",
+              "Name": "thmanyah-live-hls-endpoint",
+              "Project": "thmanyah-streaming-assignment"
+            },
+            "template_body": "{\"AWSTemplateFormatVersion\":\"2010-09-09\",\"Description\":\"MediaPackage HLS Origin Endpoint\",\"Outputs\":{\"EndpointUrl\":{\"Value\":{\"Fn::GetAtt\":[\"HlsEndpoint\",\"Url\"]}}},\"Resources\":{\"HlsEndpoint\":{\"Properties\":{\"ChannelId\":\"thmanyah-live-channel\",\"Description\":\"HLS origin endpoint for live streaming\",\"HlsPackage\":{\"IncludeIframeOnlyStream\":false,\"PlaylistType\":\"EVENT\",\"PlaylistWindowSeconds\":60,\"SegmentDurationSeconds\":6,\"UseAudioRenditionGroup\":false},\"Id\":\"thmanyah-live-hls-endpoint\",\"StartoverWindowSeconds\":0,\"TimeDelaySeconds\":0},\"Type\":\"AWS::MediaPackage::OriginEndpoint\"}}}",
+            "template_url": null,
+            "timeout_in_minutes": 0,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInVwZGF0ZSI6MTgwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_media_package_channel.main"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_cloudfront_distribution",
+      "name": "live_stream",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "aliases": null,
+            "arn": "arn:aws:cloudfront::837027387012:distribution/E1TL9YRBMM8PS6",
+            "caller_reference": "terraform-20260312200845251100000003",
+            "comment": "Thmanyah live streaming CDN distribution",
+            "continuous_deployment_policy_id": "",
+            "custom_error_response": [],
+            "default_cache_behavior": [
+              {
+                "allowed_methods": [
+                  "GET",
+                  "HEAD",
+                  "OPTIONS"
+                ],
+                "cache_policy_id": "",
+                "cached_methods": [
+                  "GET",
+                  "HEAD"
+                ],
+                "compress": true,
+                "default_ttl": 1,
+                "field_level_encryption_id": "",
+                "forwarded_values": [
+                  {
+                    "cookies": [
+                      {
+                        "forward": "none",
+                        "whitelisted_names": []
+                      }
+                    ],
+                    "headers": [
+                      "Origin"
+                    ],
+                    "query_string": true,
+                    "query_string_cache_keys": []
+                  }
+                ],
+                "function_association": [],
+                "grpc_config": [
+                  {
+                    "enabled": false
+                  }
+                ],
+                "lambda_function_association": [],
+                "max_ttl": 1,
+                "min_ttl": 0,
+                "origin_request_policy_id": "",
+                "realtime_log_config_arn": "",
+                "response_headers_policy_id": "",
+                "smooth_streaming": false,
+                "target_origin_id": "mediapackage-origin",
+                "trusted_key_groups": [],
+                "trusted_signers": [],
+                "viewer_protocol_policy": "redirect-to-https"
+              }
+            ],
+            "default_root_object": "",
+            "domain_name": "d1pmkig3oymfzd.cloudfront.net",
+            "enabled": true,
+            "etag": "E23ZP02F085DFQ",
+            "hosted_zone_id": "Z2FDTNDATAQYW2",
+            "http_version": "http2",
+            "id": "E1TL9YRBMM8PS6",
+            "in_progress_validation_batches": 0,
+            "is_ipv6_enabled": true,
+            "last_modified_time": "2026-03-12 20:08:46.043 +0000 UTC",
+            "logging_config": [],
+            "ordered_cache_behavior": [
+              {
+                "allowed_methods": [
+                  "GET",
+                  "HEAD"
+                ],
+                "cache_policy_id": "",
+                "cached_methods": [
+                  "GET",
+                  "HEAD"
+                ],
+                "compress": false,
+                "default_ttl": 86400,
+                "field_level_encryption_id": "",
+                "forwarded_values": [
+                  {
+                    "cookies": [
+                      {
+                        "forward": "none",
+                        "whitelisted_names": null
+                      }
+                    ],
+                    "headers": [
+                      "Origin"
+                    ],
+                    "query_string": true,
+                    "query_string_cache_keys": []
+                  }
+                ],
+                "function_association": [],
+                "grpc_config": [
+                  {
+                    "enabled": false
+                  }
+                ],
+                "lambda_function_association": [],
+                "max_ttl": 86400,
+                "min_ttl": 86400,
+                "origin_request_policy_id": "",
+                "path_pattern": "*.ts",
+                "realtime_log_config_arn": "",
+                "response_headers_policy_id": "",
+                "smooth_streaming": false,
+                "target_origin_id": "mediapackage-origin",
+                "trusted_key_groups": null,
+                "trusted_signers": null,
+                "viewer_protocol_policy": "redirect-to-https"
+              },
+              {
+                "allowed_methods": [
+                  "GET",
+                  "HEAD"
+                ],
+                "cache_policy_id": "",
+                "cached_methods": [
+                  "GET",
+                  "HEAD"
+                ],
+                "compress": false,
+                "default_ttl": 86400,
+                "field_level_encryption_id": "",
+                "forwarded_values": [
+                  {
+                    "cookies": [
+                      {
+                        "forward": "none",
+                        "whitelisted_names": null
+                      }
+                    ],
+                    "headers": [
+                      "Origin"
+                    ],
+                    "query_string": true,
+                    "query_string_cache_keys": []
+                  }
+                ],
+                "function_association": [],
+                "grpc_config": [
+                  {
+                    "enabled": false
+                  }
+                ],
+                "lambda_function_association": [],
+                "max_ttl": 86400,
+                "min_ttl": 86400,
+                "origin_request_policy_id": "",
+                "path_pattern": "*.m4s",
+                "realtime_log_config_arn": "",
+                "response_headers_policy_id": "",
+                "smooth_streaming": false,
+                "target_origin_id": "mediapackage-origin",
+                "trusted_key_groups": null,
+                "trusted_signers": null,
+                "viewer_protocol_policy": "redirect-to-https"
+              }
+            ],
+            "origin": [
+              {
+                "connection_attempts": 3,
+                "connection_timeout": 10,
+                "custom_header": [],
+                "custom_origin_config": [
+                  {
+                    "http_port": 80,
+                    "https_port": 443,
+                    "origin_keepalive_timeout": 5,
+                    "origin_protocol_policy": "https-only",
+                    "origin_read_timeout": 30,
+                    "origin_ssl_protocols": [
+                      "TLSv1.2"
+                    ]
+                  }
+                ],
+                "domain_name": "547f72e6652371c3.mediapackage.us-east-1.amazonaws.com",
+                "origin_access_control_id": "",
+                "origin_id": "mediapackage-origin",
+                "origin_path": "",
+                "origin_shield": [],
+                "s3_origin_config": [],
+                "vpc_origin_config": []
+              }
+            ],
+            "origin_group": [],
+            "price_class": "PriceClass_All",
+            "restrictions": [
+              {
+                "geo_restriction": [
+                  {
+                    "locations": [],
+                    "restriction_type": "none"
+                  }
+                ]
+              }
+            ],
+            "retain_on_delete": false,
+            "staging": false,
+            "status": "Deployed",
+            "tags": {
+              "Name": "thmanyah-live-cdn"
+            },
+            "tags_all": {
+              "Environment": "demo",
+              "ManagedBy": "terraform",
+              "Name": "thmanyah-live-cdn",
+              "Project": "thmanyah-streaming-assignment"
+            },
+            "trusted_key_groups": [
+              {
+                "enabled": false,
+                "items": []
+              }
+            ],
+            "trusted_signers": [
+              {
+                "enabled": false,
+                "items": []
+              }
+            ],
+            "viewer_certificate": [
+              {
+                "acm_certificate_arn": "",
+                "cloudfront_default_certificate": true,
+                "iam_certificate_id": "",
+                "minimum_protocol_version": "TLSv1",
+                "ssl_support_method": ""
+              }
+            ],
+            "wait_for_deployment": true,
+            "web_acl_id": ""
+          },
+          "sensitive_attributes": [],
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "aws_cloudformation_stack.mediapackage_endpoint",
+            "aws_media_package_channel.main"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "mediaconnect_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::837027387012:role/thmanyah-live-mediaconnect-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"mediaconnect.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-03-12T20:08:30Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "thmanyah-live-mediaconnect-role",
+            "inline_policy": [],
+            "managed_policy_arns": [],
+            "max_session_duration": 3600,
+            "name": "thmanyah-live-mediaconnect-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": null,
+            "tags_all": {
+              "Environment": "demo",
+              "ManagedBy": "terraform",
+              "Project": "thmanyah-streaming-assignment"
+            },
+            "unique_id": "AROA4FYVYK2CNYW7JG3ZR"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "medialive_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::837027387012:role/thmanyah-live-medialive-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"medialive.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-03-12T20:08:30Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "thmanyah-live-medialive-role",
+            "inline_policy": [],
+            "managed_policy_arns": [],
+            "max_session_duration": 3600,
+            "name": "thmanyah-live-medialive-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": null,
+            "tags_all": {
+              "Environment": "demo",
+              "ManagedBy": "terraform",
+              "Project": "thmanyah-streaming-assignment"
+            },
+            "unique_id": "AROA4FYVYK2CHHQ6D2DZI"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "medialive_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "thmanyah-live-medialive-role:thmanyah-live-medialive-policy",
+            "name": "thmanyah-live-medialive-policy",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"mediaconnect:ManagedDescribeFlow\",\"mediaconnect:ManagedAddOutput\",\"mediaconnect:ManagedRemoveOutput\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"mediapackage:DescribeChannel\",\"mediapackagev2:*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"logs:CreateLogGroup\",\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:*:*:*\"},{\"Action\":[\"ec2:DescribeSubnets\",\"ec2:DescribeNetworkInterfaces\",\"ec2:CreateNetworkInterface\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSecurityGroups\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}",
+            "role": "thmanyah-live-medialive-role"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.medialive_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_media_package_channel",
+      "name": "main",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:mediapackage:us-east-1:837027387012:channels/5c31ce8169544728a7a6fc532abccb8d",
+            "channel_id": "thmanyah-live-channel",
+            "description": "Live streaming channel for Thmanyah assignment",
+            "hls_ingest": [
+              {
+                "ingest_endpoints": [
+                  {
+                    "password": "8da2b02e42e24b4abfafd5275fa574f9",
+                    "url": "https://755ca1af5faa9bea.mediapackage.us-east-1.amazonaws.com/in/v2/5c31ce8169544728a7a6fc532abccb8d/5c31ce8169544728a7a6fc532abccb8d/channel",
+                    "username": "dc9d0a90141f4c449a4cf7d730fa5537"
+                  },
+                  {
+                    "password": "38d58d03e50644ed98fa9af3935dacd8",
+                    "url": "https://2bcff136c2fbf1e5.mediapackage.us-east-1.amazonaws.com/in/v2/5c31ce8169544728a7a6fc532abccb8d/270b6502bdd24822b2fb332a09862d98/channel",
+                    "username": "1c93137c6a6d4722a29c80d0c1fe58d4"
+                  }
+                ]
+              }
+            ],
+            "id": "thmanyah-live-channel",
+            "tags": {
+              "Name": "thmanyah-live-channel"
+            },
+            "tags_all": {
+              "Environment": "demo",
+              "ManagedBy": "terraform",
+              "Name": "thmanyah-live-channel",
+              "Project": "thmanyah-streaming-assignment"
+            }
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_medialive_channel",
+      "name": "live_channel",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:medialive:us-east-1:837027387012:channel:613880",
+            "cdi_input_specification": [],
+            "channel_class": "SINGLE_PIPELINE",
+            "channel_id": "613880",
+            "destinations": [
+              {
+                "id": "mediapackage-dest",
+                "media_package_settings": [
+                  {
+                    "channel_id": "thmanyah-live-channel"
+                  }
+                ],
+                "multiplex_settings": [],
+                "settings": []
+              }
+            ],
+            "encoder_settings": [
+              {
+                "audio_descriptions": [
+                  {
+                    "audio_normalization_settings": [],
+                    "audio_selector_name": "default",
+                    "audio_type": "",
+                    "audio_type_control": "",
+                    "audio_watermark_settings": [],
+                    "codec_settings": [
+                      {
+                        "aac_settings": [
+                          {
+                            "bitrate": 128000,
+                            "coding_mode": "CODING_MODE_2_0",
+                            "input_type": "",
+                            "profile": "",
+                            "rate_control_mode": "CBR",
+                            "raw_format": "",
+                            "sample_rate": 48000,
+                            "spec": "",
+                            "vbr_quality": ""
+                          }
+                        ],
+                        "ac3_settings": [],
+                        "eac3_atmos_settings": [],
+                        "eac3_settings": [],
+                        "mp2_settings": [],
+                        "pass_through_settings": [],
+                        "wav_settings": []
+                      }
+                    ],
+                    "language_code": "",
+                    "language_code_control": "",
+                    "name": "audio_1",
+                    "remix_settings": [],
+                    "stream_name": ""
+                  }
+                ],
+                "avail_blanking": [],
+                "caption_descriptions": [],
+                "global_configuration": [],
+                "motion_graphics_configuration": [],
+                "nielsen_configuration": [],
+                "output_groups": [
+                  {
+                    "name": "hls-mediapackage",
+                    "output_group_settings": [
+                      {
+                        "archive_group_settings": [],
+                        "frame_capture_group_settings": [],
+                        "hls_group_settings": [],
+                        "media_package_group_settings": [
+                          {
+                            "destination": [
+                              {
+                                "destination_ref_id": "mediapackage-dest"
+                              }
+                            ]
+                          }
+                        ],
+                        "ms_smooth_group_settings": [],
+                        "multiplex_group_settings": [],
+                        "rtmp_group_settings": [],
+                        "udp_group_settings": []
+                      }
+                    ],
+                    "outputs": [
+                      {
+                        "audio_description_names": [
+                          "audio_1"
+                        ],
+                        "caption_description_names": [],
+                        "output_name": "1080p",
+                        "output_settings": [
+                          {
+                            "archive_output_settings": [],
+                            "frame_capture_output_settings": [],
+                            "hls_output_settings": [],
+                            "media_package_output_settings": [],
+                            "ms_smooth_output_settings": [],
+                            "multiplex_output_settings": [],
+                            "rtmp_output_settings": [],
+                            "udp_output_settings": []
+                          }
+                        ],
+                        "video_description_name": "video_1080p"
+                      },
+                      {
+                        "audio_description_names": [
+                          "audio_1"
+                        ],
+                        "caption_description_names": [],
+                        "output_name": "720p",
+                        "output_settings": [
+                          {
+                            "archive_output_settings": [],
+                            "frame_capture_output_settings": [],
+                            "hls_output_settings": [],
+                            "media_package_output_settings": [],
+                            "ms_smooth_output_settings": [],
+                            "multiplex_output_settings": [],
+                            "rtmp_output_settings": [],
+                            "udp_output_settings": []
+                          }
+                        ],
+                        "video_description_name": "video_720p"
+                      },
+                      {
+                        "audio_description_names": [
+                          "audio_1"
+                        ],
+                        "caption_description_names": [],
+                        "output_name": "480p",
+                        "output_settings": [
+                          {
+                            "archive_output_settings": [],
+                            "frame_capture_output_settings": [],
+                            "hls_output_settings": [],
+                            "media_package_output_settings": [],
+                            "ms_smooth_output_settings": [],
+                            "multiplex_output_settings": [],
+                            "rtmp_output_settings": [],
+                            "udp_output_settings": []
+                          }
+                        ],
+                        "video_description_name": "video_480p"
+                      }
+                    ]
+                  }
+                ],
+                "timecode_config": [
+                  {
+                    "source": "SYSTEMCLOCK",
+                    "sync_threshold": 0
+                  }
+                ],
+                "video_descriptions": [
+                  {
+                    "codec_settings": [
+                      {
+                        "frame_capture_settings": [],
+                        "h264_settings": [
+                          {
+                            "adaptive_quantization": "HIGH",
+                            "afd_signaling": "",
+                            "bitrate": 5000000,
+                            "buf_fill_pct": 0,
+                            "buf_size": 0,
+                            "color_metadata": "",
+                            "entropy_encoding": "",
+                            "filter_settings": [],
+                            "fixed_afd": "",
+                            "flicker_aq": "",
+                            "force_field_pictures": "",
+                            "framerate_control": "SPECIFIED",
+                            "framerate_denominator": 1,
+                            "framerate_numerator": 30,
+                            "gop_b_reference": "",
+                            "gop_closed_cadence": 0,
+                            "gop_num_b_frames": 0,
+                            "gop_size": 2,
+                            "gop_size_units": "SECONDS",
+                            "level": "H264_LEVEL_AUTO",
+                            "look_ahead_rate_control": "",
+                            "max_bitrate": 0,
+                            "min_i_interval": 0,
+                            "num_ref_frames": 0,
+                            "par_control": "SPECIFIED",
+                            "par_denominator": 1,
+                            "par_numerator": 1,
+                            "profile": "HIGH",
+                            "quality_level": "",
+                            "qvbr_quality_level": 0,
+                            "rate_control_mode": "CBR",
+                            "scan_type": "",
+                            "scene_change_detect": "ENABLED",
+                            "slices": 0,
+                            "softness": 0,
+                            "spatial_aq": "",
+                            "subgop_length": "",
+                            "syntax": "",
+                            "temporal_aq": "",
+                            "timecode_insertion": ""
+                          }
+                        ],
+                        "h265_settings": []
+                      }
+                    ],
+                    "height": 1080,
+                    "name": "video_1080p",
+                    "respond_to_afd": "",
+                    "scaling_behavior": "",
+                    "sharpness": 0,
+                    "width": 1920
+                  },
+                  {
+                    "codec_settings": [
+                      {
+                        "frame_capture_settings": [],
+                        "h264_settings": [
+                          {
+                            "adaptive_quantization": "HIGH",
+                            "afd_signaling": "",
+                            "bitrate": 3000000,
+                            "buf_fill_pct": 0,
+                            "buf_size": 0,
+                            "color_metadata": "",
+                            "entropy_encoding": "",
+                            "filter_settings": [],
+                            "fixed_afd": "",
+                            "flicker_aq": "",
+                            "force_field_pictures": "",
+                            "framerate_control": "SPECIFIED",
+                            "framerate_denominator": 1,
+                            "framerate_numerator": 30,
+                            "gop_b_reference": "",
+                            "gop_closed_cadence": 0,
+                            "gop_num_b_frames": 0,
+                            "gop_size": 2,
+                            "gop_size_units": "SECONDS",
+                            "level": "H264_LEVEL_AUTO",
+                            "look_ahead_rate_control": "",
+                            "max_bitrate": 0,
+                            "min_i_interval": 0,
+                            "num_ref_frames": 0,
+                            "par_control": "SPECIFIED",
+                            "par_denominator": 1,
+                            "par_numerator": 1,
+                            "profile": "MAIN",
+                            "quality_level": "",
+                            "qvbr_quality_level": 0,
+                            "rate_control_mode": "CBR",
+                            "scan_type": "",
+                            "scene_change_detect": "ENABLED",
+                            "slices": 0,
+                            "softness": 0,
+                            "spatial_aq": "",
+                            "subgop_length": "",
+                            "syntax": "",
+                            "temporal_aq": "",
+                            "timecode_insertion": ""
+                          }
+                        ],
+                        "h265_settings": []
+                      }
+                    ],
+                    "height": 720,
+                    "name": "video_720p",
+                    "respond_to_afd": "",
+                    "scaling_behavior": "",
+                    "sharpness": 0,
+                    "width": 1280
+                  },
+                  {
+                    "codec_settings": [
+                      {
+                        "frame_capture_settings": [],
+                        "h264_settings": [
+                          {
+                            "adaptive_quantization": "HIGH",
+                            "afd_signaling": "",
+                            "bitrate": 1500000,
+                            "buf_fill_pct": 0,
+                            "buf_size": 0,
+                            "color_metadata": "",
+                            "entropy_encoding": "",
+                            "filter_settings": [],
+                            "fixed_afd": "",
+                            "flicker_aq": "",
+                            "force_field_pictures": "",
+                            "framerate_control": "SPECIFIED",
+                            "framerate_denominator": 1,
+                            "framerate_numerator": 30,
+                            "gop_b_reference": "",
+                            "gop_closed_cadence": 0,
+                            "gop_num_b_frames": 0,
+                            "gop_size": 2,
+                            "gop_size_units": "SECONDS",
+                            "level": "H264_LEVEL_AUTO",
+                            "look_ahead_rate_control": "",
+                            "max_bitrate": 0,
+                            "min_i_interval": 0,
+                            "num_ref_frames": 0,
+                            "par_control": "SPECIFIED",
+                            "par_denominator": 1,
+                            "par_numerator": 1,
+                            "profile": "MAIN",
+                            "quality_level": "",
+                            "qvbr_quality_level": 0,
+                            "rate_control_mode": "CBR",
+                            "scan_type": "",
+                            "scene_change_detect": "ENABLED",
+                            "slices": 0,
+                            "softness": 0,
+                            "spatial_aq": "",
+                            "subgop_length": "",
+                            "syntax": "",
+                            "temporal_aq": "",
+                            "timecode_insertion": ""
+                          }
+                        ],
+                        "h265_settings": []
+                      }
+                    ],
+                    "height": 480,
+                    "name": "video_480p",
+                    "respond_to_afd": "",
+                    "scaling_behavior": "",
+                    "sharpness": 0,
+                    "width": 854
+                  }
+                ]
+              }
+            ],
+            "id": "613880",
+            "input_attachments": [
+              {
+                "automatic_input_failover_settings": [],
+                "input_attachment_name": "mediaconnect-attachment",
+                "input_id": "3518897",
+                "input_settings": []
+              }
+            ],
+            "input_specification": [
+              {
+                "codec": "AVC",
+                "input_resolution": "HD",
+                "maximum_bitrate": "MAX_20_MBPS"
+              }
+            ],
+            "log_level": "DISABLED",
+            "maintenance": [
+              {
+                "maintenance_day": "MONDAY",
+                "maintenance_start_time": "12:00"
+              }
+            ],
+            "name": "thmanyah-live-channel",
+            "role_arn": "arn:aws:iam::837027387012:role/thmanyah-live-medialive-role",
+            "start_channel": false,
+            "tags": {
+              "Name": "thmanyah-live-channel"
+            },
+            "tags_all": {
+              "Environment": "demo",
+              "ManagedBy": "terraform",
+              "Name": "thmanyah-live-channel",
+              "Project": "thmanyah-streaming-assignment"
+            },
+            "timeouts": null,
+            "vpc": []
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo5MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwLCJ1cGRhdGUiOjkwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_cloudformation_stack.mediaconnect_flow",
+            "aws_iam_role.medialive_role",
+            "aws_media_package_channel.main",
+            "aws_medialive_input.mediaconnect_input"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_medialive_input",
+      "name": "mediaconnect_input",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:medialive:us-east-1:837027387012:input:3518897",
+            "attached_channels": [],
+            "destinations": [],
+            "id": "3518897",
+            "input_class": "SINGLE_PIPELINE",
+            "input_devices": [],
+            "input_partner_ids": [],
+            "input_security_groups": null,
+            "input_source_type": "STATIC",
+            "media_connect_flows": [
+              {
+                "flow_arn": "arn:aws:mediaconnect:us-east-1:837027387012:flow:1-XFABBlNcBVpRX1JS-db9e7c6241c5:thmanyah-live-srt-ingest"
+              }
+            ],
+            "name": "thmanyah-live-mediaconnect-input",
+            "role_arn": "arn:aws:iam::837027387012:role/thmanyah-live-medialive-role",
+            "sources": [],
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "type": "MEDIACONNECT",
+            "vpc": []
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInVwZGF0ZSI6MTgwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_cloudformation_stack.mediaconnect_flow",
+            "aws_iam_role.medialive_role"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
