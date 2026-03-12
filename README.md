@@ -71,3 +71,61 @@ Media services continue billing while running.
 
 - MediaConnect flow and MediaPackage endpoint are provisioned through CloudFormation stacks from Terraform.
 - If playback fails, check that MediaConnect is `ACTIVE` and MediaLive channel is `RUNNING`.
+
+## Technical Parameters Used
+
+### 1) Ingest - SRT / Latency Mode
+
+- **Latency mode value:** `1000 ms`
+- **Why:** Balance between low delay and packet-loss recovery over public internet.
+- **Meaning:** SRT uses this buffer window to retransmit lost packets before dropping them.
+
+Why this latency mode:
+- `1000ms` works well for public internet tests.
+- Lower values reduce delay but reduce packet-loss tolerance.
+- Higher values improve stability but increase end-to-end latency.
+
+### 2) Transcoding (MediaLive) - ABR Ladder
+
+The ABR ladder includes:
+
+| Rendition | Resolution | Video Bitrate | Codec | GOP | Segment Duration |
+|---|---|---|---|---|---|
+| 1080p | 1920x1080 | 5 Mbps | H.264/AVC | 2s | 6s |
+| 720p  | 1280x720  | 3 Mbps | H.264/AVC | 2s | 6s |
+| 480p  | 854x480   | 1.5 Mbps | H.264/AVC | 2s | 6s |
+
+Why these parameters:
+- **Bitrate ladder:** Covers high/medium/low bandwidth users.
+- **GOP = 2s:** Good switching behavior for adaptive streaming.
+- **Segment = 6s:** Stable and common HLS live setting.
+- **Codec = H.264:** Broad browser/device compatibility.
+
+### 3) Packaging (MediaPackage)
+
+- **HLS Endpoint:** Created and connected to MediaLive output.
+- **Segment duration:** `6 seconds`
+- **Manifest structure:** Master `.m3u8` + variant playlists per rendition + media segments.
+- **Packaging type used:** HLS (MPEG-TS segments).
+
+Packaging summary:
+- HLS endpoint created with segment duration = `6s`.
+- Manifest structure: master playlist + rendition playlists + media segments.
+- Packaging type: `HLS`.
+
+### 4) Distribution (CloudFront CDN)
+
+- **Broadcast distribution:** Stream delivered via CloudFront CDN.
+- **Cache strategy:**
+	- Manifests (`.m3u8`) TTL = `1s`
+	- Segments (`.ts`, `.m4s`) TTL = `86400s` (24h)
+- **Why:** Manifest changes frequently, segments are immutable.
+
+CDN distribution summary:
+- Stream is delivered through CloudFront.
+- Cache policy is file-type based (short for manifests, long for segments).
+- TTL values: `1s` for manifests and `24h` for segments.
+
+### Playback Link
+
+- Use Terraform output `hls_playback_url` as the playback URL.
